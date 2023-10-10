@@ -1,0 +1,21 @@
+{
+    "name": "cekta/migrator",
+    "description": "migration tool",
+    "type": "library",
+    "keywords": [
+        "migration",
+        "migrations",
+        "migrator"
+    ],
+    "license": "GPL-3.0-only",
+    "require": {
+        "symfony/console": "^6.3",
+        "php": ">=8.0",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cekta\\Migrator\\": "src/"
+        }
+    }
+}
