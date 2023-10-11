@@ -7,7 +7,6 @@ namespace Cekta\Migrator\Command;
 use Cekta\Migrator\Migration;
 use Cekta\Migrator\Persist;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,10 +17,6 @@ class Migrate extends Command
      * @var array<Migration>
      */
     private array $migrations;
-    /**
-     * @var array<int, string>
-     */
-    private array $migration_names;
 
     /**
      * @param Persist $persist

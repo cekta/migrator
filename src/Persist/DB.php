@@ -25,7 +25,7 @@ class DB implements Persist
     {
         $this->pdo = $pdo;
 
-        $safe_pattern = '#[a-zA-Z0-9_-]#';
+        $safe_pattern = '#^[a-zA-Z0-9_-]*$#';
         if (!preg_match($safe_pattern, $table_name)) {
             throw new InvalidArgumentException(
                 "Invalid table_name: {$table_name} must match pattern: {$safe_pattern}"
