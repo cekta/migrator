@@ -9,7 +9,14 @@ interface Migration
     public function up(): void;
 
     /**
-     * @return int unix time stamp or any version number
+     * lower more priority
+     * @return int
      */
     public function order(): int;
+
+    /**
+     * uniq migration id
+     * @return string
+     */
+    public function id(): string;
 }

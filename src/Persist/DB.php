@@ -41,7 +41,7 @@ class DB implements Persist
         $this->column_name = $column_name;
     }
 
-    public function getExecutedMigrations(): array
+    public function getExecutedIds(): array
     {
         $sth = $this->pdo->query("SELECT * FROM {$this->table_name}");
         if ($sth === false) {
@@ -66,6 +66,6 @@ class DB implements Persist
                 ({$this->column_name}) 
                 VALUE (?)"
         );
-        $sth->execute([get_class($migration)]);
+        $sth->execute([$migration->id()]);
     }
 }

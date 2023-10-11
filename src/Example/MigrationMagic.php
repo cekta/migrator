@@ -35,4 +35,9 @@ EOF
     {
         return 1696191474;
     }
+
+    public function id(): string
+    {
+        return get_class($this);
+    }
 }
