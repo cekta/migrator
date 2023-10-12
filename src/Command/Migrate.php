@@ -9,7 +9,9 @@ use Cekta\Migrator\MigrationLocator;
 use Cekta\Migrator\Persist;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Migrate extends Command
@@ -39,15 +41,27 @@ class Migrate extends Command
         $this->locator = $locator;
     }
 
+    protected function configure(): void
+    {
+        $this
+            ->setDefinition(
+                new InputDefinition([
+                    new InputOption('install', 'i', description: 'Install persist storage if not installed'),
+                ])
+            );
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $ids = array_diff($this->ids, $this->persist->getExecutedIds());
+        if ($input->getOption('install') && !$this->persist->isInstalled()) {
+            $this->persist->install();
+        }
+        $ids = $this->persist->generateToExecuteIds($this->ids);
         if (empty($ids)) {
             $output->writeln('nothing to migrate');
             return Command::SUCCESS;
         }
         $migrations = $this->loadMigrations($ids);
-        ksort($migrations);
         $output->writeln('start');
         try {
             foreach ($migrations as $migration) {
@@ -56,9 +70,7 @@ class Migrate extends Command
                 $output->writeln("{$migration->id()} executed");
             }
         } catch (\Throwable $throwable) {
-            $output->writeln("can`t execute migration {$migration->id()}");
-            $output->writeln((string)$throwable);
-            return Command::FAILURE;
+            throw new RuntimeException("can`t execute migration {$migration->id()}", previous: $throwable);
         }
         $output->writeln('done');
         return Command::SUCCESS;
@@ -84,6 +96,7 @@ class Migrate extends Command
             }
             $migrations[$migration->order()] = $migration;
         }
+        ksort($migrations);
         return $migrations;
     }
 }

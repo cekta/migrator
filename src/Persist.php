@@ -8,5 +8,8 @@ interface Persist
 {
     public function execute(Migration $migration): void;
 
-    public function getExecutedIds(): array;
+    public function generateToExecuteIds(array $ids): array;
+
+    public function isInstalled(): bool;
+    public function install(): void;
 }

@@ -9,6 +9,7 @@ use Cekta\Migrator\Persist;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
+use Throwable;
 
 class DB implements Persist
 {
@@ -21,7 +22,7 @@ class DB implements Persist
      * @param string $table_name
      * @param string $column_name
      */
-    public function __construct(PDO $pdo, string $table_name = 'migrations', string $column_name = 'migration')
+    public function __construct(PDO $pdo, string $table_name = 'migrations', string $column_name = 'name')
     {
         $this->pdo = $pdo;
 
@@ -41,7 +42,7 @@ class DB implements Persist
         $this->column_name = $column_name;
     }
 
-    public function getExecutedIds(): array
+    public function generateToExecuteIds(array $ids): array
     {
         $sth = $this->pdo->query("SELECT * FROM {$this->table_name}");
         if ($sth === false) {
@@ -55,7 +56,7 @@ class DB implements Persist
             $result[] = $row[$this->column_name];
         }
 
-        return $result;
+        return array_diff($ids, $result);
     }
 
     public function execute(Migration $migration): void
@@ -67,5 +68,24 @@ class DB implements Persist
                 VALUE (?)"
         );
         $sth->execute([$migration->id()]);
+    }
+
+    public function isInstalled(): bool
+    {
+        try {
+            $result = $this->pdo->query("SELECT 1 FROM {$this->table_name} LIMIT 1");
+        } catch (Throwable) {
+            return false;
+        }
+        return $result !== false;
+    }
+
+    public function install(): void
+    {
+        $sql = "create table {$this->table_name}
+(
+    {$this->column_name} varchar(255) not null primary key
+);";
+        $this->pdo->exec($sql);
     }
 }
