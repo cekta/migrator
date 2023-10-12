@@ -65,7 +65,7 @@ class DB implements Persist
         $sth = $this->pdo->prepare(
             "INSERT INTO {$this->table_name} 
                 ({$this->column_name}) 
-                VALUE (?)"
+                VALUES (?)"
         );
         $sth->execute([$migration->id()]);
     }

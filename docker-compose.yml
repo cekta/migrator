@@ -1,14 +1,21 @@
 version: '3.9'
 services:
-  db:
+  mysql:
     image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 12345
       MYSQL_DATABASE: app
     ports:
       - "3306:3306"
-    volumes:
-      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  pgsql:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: app
+    ports:
+      - "5432:5432"
+
   app:
     build:
       context: ./
@@ -16,6 +23,7 @@ services:
     volumes:
       - ./:/app
     working_dir: /app
+    user: "${UID:-1000}:${GID:-1000}"
     tty: true
     environment:
       - PHP_IDE_CONFIG=serverName=docker

@@ -22,9 +22,7 @@ class MigrationMagic implements Migration
             <<<'EOF'
 create table test2
 (
-    id int auto_increment,
-    constraint test1_pk
-        primary key (id)
+    id int
 );
 EOF
 

@@ -13,7 +13,16 @@ use Symfony\Component\Console\Application;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$pdo = new PDO('mysql:host=db;dbname=app;charset=utf8', 'root', '12345', [
+$dsn = 'pgsql:host=pgsql;dbname=app';
+$username = 'postgres';
+
+$dsn = 'mysql:host=mysql;dbname=app;charset=utf8';
+$username = 'root';
+
+$dsn = 'sqlite:db.sqlite';
+$username = null;
+
+$pdo = new PDO($dsn, $username, '12345', [
     PDO::ATTR_EMULATE_PREPARES => false
 ]);
 $locator = new class($pdo) implements MigrationLocator {

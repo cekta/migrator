@@ -22,9 +22,7 @@ class Migration3 implements Migration
             <<<'EOF'
 create table test3
 (
-    id int auto_increment,
-    constraint test1_pk
-        primary key (id)
+    id int
 );
 EOF
 
