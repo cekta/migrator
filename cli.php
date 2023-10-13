@@ -19,8 +19,8 @@ $username = 'postgres';
 $dsn = 'mysql:host=mysql;dbname=app;charset=utf8';
 $username = 'root';
 
-$dsn = 'sqlite:db.sqlite';
-$username = null;
+//$dsn = 'sqlite:db.sqlite';
+//$username = null;
 
 $pdo = new PDO($dsn, $username, '12345', [
     PDO::ATTR_EMULATE_PREPARES => false

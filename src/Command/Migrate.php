@@ -56,6 +56,11 @@ class Migrate extends Command
         if ($input->getOption('install') && !$this->persist->isInstalled()) {
             $this->persist->install();
         }
+        if (!$input->getOption('install') && !$this->persist->isInstalled()) {
+            $output->writeln('migrator not installed');
+            $output->writeln('use -i or --install to install');
+            return Command::FAILURE;
+        }
         $ids = $this->persist->generateToExecuteIds($this->ids);
         if (empty($ids)) {
             $output->writeln('nothing to migrate');
@@ -94,9 +99,14 @@ class Migrate extends Command
                     "Loaded migration with id: {$migration->id()} must be equal id: {$id}"
                 );
             }
-            $migrations[$migration->order()] = $migration;
+            $migrations[] = $migration;
         }
-        ksort($migrations);
+        usort($migrations, function (Migration $a, Migration $b) {
+            if ($a->order() === $b->order()) {
+                return 0;
+            }
+            return ($a->order() < $b->order()) ? -1 : 1;
+        });
         return $migrations;
     }
 }
