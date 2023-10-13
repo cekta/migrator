@@ -90,13 +90,14 @@ class Migrate extends Command
         $migrations = [];
         foreach ($ids as $id) {
             $migration = $this->locator->get($id);
-            if (array_key_exists($migration->order(), $migrations)) {
-                throw new RuntimeException("order `{$migration->order()}` duplication for `{$id}`");
-            }
-
             if ($migration->id() !== $id) {
                 throw new RuntimeException(
                     "Loaded migration with id: {$migration->id()} must be equal id: {$id}"
+                );
+            }
+            if (mb_strlen($migration->id()) > 255) {
+                throw new RuntimeException(
+                    "Migration id: `{$migration->id()}` length must be less than 255"
                 );
             }
             $migrations[] = $migration;
