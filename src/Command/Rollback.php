@@ -7,12 +7,10 @@ namespace Cekta\Migrator\Command;
 use Cekta\Migrator\MigrationLocator;
 use Cekta\Migrator\Storage;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Migrate extends Command
+class Rollback extends Command
 {
     private Storage $storage;
     private MigrationLocator $locator;
@@ -20,36 +18,23 @@ class Migrate extends Command
     public function __construct(
         Storage $storage,
         MigrationLocator $locator,
-        string $name = 'migrate'
+        string $name = 'migration:rollback'
     ) {
         parent::__construct($name);
         $this->storage = $storage;
         $this->locator = $locator;
     }
 
-    protected function configure(): void
-    {
-        $this
-            ->setDefinition(
-                new InputDefinition([
-                    new InputOption('install', 'i', description: 'Install persist storage if not installed'),
-                ])
-            );
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getOption('install') && !$this->storage->isInstalled()) {
-            $this->storage->install();
-        }
-        if (!$input->getOption('install') && !$this->storage->isInstalled()) {
+        if (!$this->storage->isInstalled()) {
             $output->writeln('migrator not installed');
-            $output->writeln('use -i or --install to install');
             return Command::FAILURE;
         }
-        $ids = $this->storage->generateToExecuteIds($this->locator->ids());
+        $ids = $this->storage->getRollbackIds();
+
         if (empty($ids)) {
-            $output->writeln('nothing to migrate');
+            $output->writeln('nothing to rollback');
             return Command::SUCCESS;
         }
 
@@ -58,8 +43,8 @@ class Migrate extends Command
             $migration = $this->locator->get($id);
             $class = get_class($migration);
             $output->writeln("{$class} started");
-            $this->storage->execute($migration);
-            $output->writeln("{$class} executed");
+            $this->storage->rollback($migration);
+            $output->writeln("{$class} rollbacked");
         }
         $output->writeln('done');
         return Command::SUCCESS;

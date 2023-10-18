@@ -8,15 +8,10 @@ interface Migration
 {
     public function up(): void;
 
-    /**
-     * lower more priority
-     * @return int
-     */
-    public function order(): int;
+    public function down(): void;
 
     /**
-     * uniq migration id
-     * @return string
+     * @return int unique ascending identifier, unix timestamp normal choice
      */
-    public function id(): string;
+    public static function id(): int;
 }

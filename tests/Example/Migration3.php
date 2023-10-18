@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cekta\Migrator\Example;
+namespace Cekta\Migrator\Test\Example;
 
 use Cekta\Migrator\Migration;
 use PDO;
@@ -29,13 +29,17 @@ EOF
         );
     }
 
-    public function order(): int
+    public function down(): void
     {
-        return 1696191220;
+        $this->pdo->exec(
+            <<<'EOF'
+drop table test3;
+EOF
+        );
     }
 
-    public function id(): string
+    public static function id(): int
     {
-        return get_class($this);
+        return 3;
     }
 }
