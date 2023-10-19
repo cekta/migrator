@@ -7,9 +7,7 @@ namespace Cekta\Migrator\Command;
 use Cekta\Migrator\MigrationLocator;
 use Cekta\Migrator\Storage;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Migrate extends Command
@@ -29,12 +27,7 @@ class Migrate extends Command
 
     protected function configure(): void
     {
-        $this
-            ->setDefinition(
-                new InputDefinition([
-                    new InputOption('install', 'i', description: 'Install persist storage if not installed'),
-                ])
-            );
+        $this->addOption('install', 'i', description: 'Install persist storage if not installed' );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

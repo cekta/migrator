@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Cekta\Migrator\Command\MakeMigration;
 use Cekta\Migrator\Command\Migrate;
 use Cekta\Migrator\Command\Rollback;
 use Cekta\Migrator\Migration;
@@ -23,8 +24,6 @@ $username = 'root';
 
 //$dsn = 'sqlite:db.sqlite';
 //$username = null;
-
-echo $dsn . PHP_EOL;
 
 $pdo = new PDO($dsn, $username, '12345', [
     PDO::ATTR_EMULATE_PREPARES => false
@@ -58,6 +57,7 @@ $storage = new DB($pdo);
 $application = new Application();
 $application->addCommands([
     new Migrate($storage, $locator),
-    new Rollback($storage, $locator)
+    new Rollback($storage, $locator),
+    new MakeMigration(),
 ]);
 $application->run();
