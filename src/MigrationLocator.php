@@ -24,6 +24,7 @@ class MigrationLocator
                 throw new InvalidArgumentException("{$fqcn} must implement " . Migration::class);
             }
 
+            /** @noinspection PhpUndefinedMethodInspection */
             $id = $fqcn::id();
             if (array_key_exists($id, $this->migrations)) {
                 throw new InvalidArgumentException(
@@ -40,7 +41,7 @@ class MigrationLocator
     {
         if (!array_key_exists($id, $this->migrations)) {
             $message = "Not found migration name for id = `{$id}`";
-            throw new class($message) extends \RuntimeException implements NotFoundExceptionInterface {
+            throw new class ($message) extends \RuntimeException implements NotFoundExceptionInterface {
             };
         }
 
@@ -59,5 +60,4 @@ class MigrationLocator
     {
         return array_keys($this->migrations);
     }
-
 }

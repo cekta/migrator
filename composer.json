@@ -9,10 +9,10 @@
     ],
     "license": "GPL-3.0-only",
     "require": {
-        "symfony/console": "^6.3",
-        "php": ">=8.0",
+        "symfony/console": "@stable",
+        "php": ">=8.1",
         "ext-pdo": "*",
-        "psr/container": "^2.0"
+        "psr/container": "@stable"
     },
     "autoload": {
         "psr-4": {
@@ -23,5 +23,10 @@
         "psr-4": {
             "Cekta\\Migrator\\Test\\": "tests/"
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "@stable",
+        "phpunit/phpunit": "@stable",
+        "phpstan/phpstan": "@stable"
     }
 }

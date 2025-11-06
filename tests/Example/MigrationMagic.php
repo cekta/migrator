@@ -25,7 +25,6 @@ create table test5
     id int
 );
 EOF
-
         );
     }
 

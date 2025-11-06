@@ -1,6 +1,5 @@
 FROM php:cli-alpine as app
 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions pdo_mysql pdo_pgsql xdebug @composer
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions pdo_mysql pdo_pgsql xdebug @composer && \
+    apk add make

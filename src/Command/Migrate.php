@@ -27,7 +27,7 @@ class Migrate extends Command
 
     protected function configure(): void
     {
-        $this->addOption('install', 'i', description: 'Install persist storage if not installed' );
+        $this->addOption('install', 'i', description: 'Install persist storage if not installed');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
