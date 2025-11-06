@@ -5,7 +5,7 @@ up:
 build:
 	docker compose build
 shell: up
-	docker compose exec app sh
+	docker compose exec app bash
 refresh: down build up
 migrate: up
 	docker compose exec app php ./tests/bin/cli.php migrate -i
