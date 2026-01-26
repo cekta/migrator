@@ -12,7 +12,8 @@
         "symfony/console": "@stable",
         "php": ">=8.1",
         "ext-pdo": "*",
-        "psr/container": "@stable"
+        "psr/container": "@stable",
+        "cekta/di-module": "@stable"
     },
     "autoload": {
         "psr-4": {
