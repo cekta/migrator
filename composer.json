@@ -1,33 +1,41 @@
 {
-    "name": "cekta/migrator",
-    "description": "migration tool",
-    "type": "library",
-    "keywords": [
-        "migration",
-        "migrations",
-        "migrator"
-    ],
-    "license": "GPL-3.0-only",
-    "require": {
-        "symfony/console": "@stable",
-        "php": ">=8.1",
-        "ext-pdo": "*",
-        "psr/container": "@stable",
-        "cekta/di-module": "@stable"
-    },
-    "autoload": {
-        "psr-4": {
-            "Cekta\\Migrator\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Cekta\\Migrator\\Test\\": "tests/"
-        }
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "@stable",
-        "phpunit/phpunit": "@stable",
-        "phpstan/phpstan": "@stable"
+  "name": "cekta/migrator",
+  "description": "migration tool",
+  "type": "library",
+  "license": "GPL-3.0-only",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
     }
+  },
+  "require": {
+    "php": ">=8.2",
+    "ext-pdo": "*",
+    "symfony/console": "@stable",
+    "psr/container": "@stable",
+    "cekta/framework-contract": "dev-master"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "@stable",
+    "phpunit/phpunit": "@stable",
+    "phpstan/phpstan": "@stable",
+    "infection/infection": "@stable"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cekta\\Migrator\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Cekta\\Migrator\\Test\\": "tests/"
+    }
+  },
+  "keywords": [
+    "migration",
+    "migrations",
+    "migrator"
+  ]
 }

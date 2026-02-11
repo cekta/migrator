@@ -6,7 +6,7 @@ namespace Cekta\Migrator;
 
 use ReflectionClass;
 
-class Module implements \Cekta\DI\Module
+class Module implements \Cekta\Framework\Contract\Module
 {
     private array $state = [];
 
