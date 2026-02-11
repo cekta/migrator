@@ -8,6 +8,9 @@ use ReflectionClass;
 
 class Module implements \Cekta\Framework\Contract\Module
 {
+    /**
+     * @var array<string,array<string>>
+     */
     private array $state = [];
 
     public function __construct(
@@ -20,6 +23,7 @@ class Module implements \Cekta\Framework\Contract\Module
      */
     public function onCreate(string $encoded_module): array
     {
+        /** @var array<string,array<string>> $state */
         $state = json_decode($encoded_module, true);
         return [
             '...' . MigrationLocator::class . '$migrations' => $state[Migration::class] ?? [],
@@ -31,6 +35,7 @@ class Module implements \Cekta\Framework\Contract\Module
      */
     public function onBuild(string $encoded_module): array
     {
+        /** @var array<string,array<string>> $state */
         $state = json_decode($encoded_module, true);
         return [
             'entries' => [
@@ -60,6 +65,10 @@ class Module implements \Cekta\Framework\Contract\Module
      */
     public function getEncodedModule(): string
     {
-        return json_encode($this->state, JSON_PRETTY_PRINT);
+        $encoded_module = json_encode($this->state, JSON_PRETTY_PRINT);
+        if ($encoded_module === false) {
+            throw new \RuntimeException('state not encoded');
+        }
+        return $encoded_module;
     }
 }

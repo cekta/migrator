@@ -23,6 +23,20 @@
     "phpstan/phpstan": "@stable",
     "infection/infection": "@stable"
   },
+  "scripts": {
+    "test": [
+      "@composer install",
+      "@phpcs",
+      "@phpstan",
+      "@phpunit"
+    ],
+    "phpcs": "./vendor/bin/phpcs",
+    "phpstan": "./vendor/bin/phpstan analyse --memory-limit=-1",
+    "phpunit": "./vendor/bin/phpunit",
+    "infection": "./vendor/bin/infection --show-mutations",
+    "migrate": "@php ./tests/bin/cli.php migrate -i",
+    "rollback": "@php ./tests/bin/cli.php migration:rollback"
+  },
   "autoload": {
     "psr-4": {
       "Cekta\\Migrator\\": "src/"

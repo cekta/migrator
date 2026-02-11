@@ -59,7 +59,11 @@ class DB implements Storage
         }
 
         $result = [];
+        /** @var array<mixed> $row */
         foreach ($sth as $row) {
+            if (!array_key_exists($this->column_id, $row)) {
+                throw new \RuntimeException("column_id = `{$this->column_id}` not found in row");
+            }
             $result[] = $row[$this->column_id];
         }
 
@@ -101,15 +105,30 @@ class DB implements Storage
         $this->pdo->exec($sql);
     }
 
-    public function getRollbackIds($step = 1): array
+    /**
+     * @inheritDoc
+     */
+    public function getRollbackIds(int $step = 1): array
     {
         $sth = $this->pdo->query(
             "select * from {$this->table_name} ORDER BY {$this->column_id} desc LIMIT {$step}"
         );
-
+        if ($sth === false) {
+            throw new PDOException(
+                "[{$this->pdo->errorInfo()[0]}][{$this->pdo->errorInfo()[1]}] {$this->pdo->errorInfo()[2]}"
+            );
+        }
         $result = [];
+        /** @var array<mixed> $row */
         foreach ($sth as $row) {
-            $result[] = $row[$this->column_id];
+            if (!array_key_exists($this->column_id, $row)) {
+                throw new \RuntimeException("column_id = `{$this->column_id}` not found in row");
+            }
+            $id = $row[$this->column_id];
+            if (!is_int($id)) {
+                throw new \RuntimeException("id must be integer");
+            }
+            $result[] = $id;
         }
         return $result;
     }

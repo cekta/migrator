@@ -17,21 +17,22 @@ class MigrationLocator
     private array $migrations = [];
     private ContainerInterface $container;
 
+    /**
+     * @param ContainerInterface $container
+     * @param class-string ...$migrations
+     */
     public function __construct(ContainerInterface $container, string ...$migrations)
     {
         foreach ($migrations as $fqcn) {
             if (!in_array(Migration::class, class_implements($fqcn))) {
                 throw new InvalidArgumentException("{$fqcn} must implement " . Migration::class);
             }
-
-            /** @noinspection PhpUndefinedMethodInspection */
             $id = $fqcn::id();
             if (array_key_exists($id, $this->migrations)) {
                 throw new InvalidArgumentException(
                     "ID = `{$id}` is not equal, check: {$fqcn} and {$this->migrations[$id]}"
                 );
             }
-
             $this->migrations[$id] = $fqcn;
         }
         $this->container = $container;
@@ -45,6 +46,7 @@ class MigrationLocator
             };
         }
 
+        /** @var Migration $migration */
         $migration = $this->container->get($this->migrations[$id]);
 
         if ($migration->id() !== $id) {
@@ -56,7 +58,10 @@ class MigrationLocator
         return $migration;
     }
 
-    public function ids()
+    /**
+     * @return array<int>
+     */
+    public function ids(): array
     {
         return array_keys($this->migrations);
     }

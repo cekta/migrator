@@ -1,3 +1,4 @@
 vendor
+book
 composer.lock
 db.sqlite

@@ -28,7 +28,7 @@ $username = null;
 $pdo = new PDO($dsn, $username, '12345', [
     PDO::ATTR_EMULATE_PREPARES => false
 ]);
-$container = new class($pdo) implements ContainerInterface {
+$container = new class ($pdo) implements ContainerInterface {
     private PDO $pdo;
 
     public function __construct(PDO $pdo)

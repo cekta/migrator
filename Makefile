@@ -1,20 +1,11 @@
-down:
-	docker compose down
-up:
+.PHONY: dev  shell refresh docs-build
+
+dev:
 	docker compose up -d --remove-orphans
-build:
+shell: dev
+	docker compose exec -it app bash
+refresh:
+	docker compose down
 	docker compose build
-shell: up
-	docker compose exec app bash
-refresh: down build up
-migrate: up
-	docker compose exec app php ./tests/bin/cli.php migrate -i
-rollback: up
-	docker compose exec app php ./tests/bin/cli.php migration:rollback
-phpcs:
-	./vendor/bin/phpcs
-phpstan:
-	./vendor/bin/phpstan analyse --memory-limit=-1
-phpunit:
-	./vendor/bin/phpunit
-ci: phpcs phpstan phpunit
+docs-build:
+	docker compose run --rm pages build
