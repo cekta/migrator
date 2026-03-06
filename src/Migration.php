@@ -11,7 +11,7 @@ interface Migration
     public function down(): void;
 
     /**
-     * @return int unique ascending identifier, unix timestamp normal choice
+     * @return int unique ascending identifier, unix timestamp normal choice, date +%s
      */
     public static function id(): int;
 }

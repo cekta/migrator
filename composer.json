@@ -15,7 +15,7 @@
     "ext-pdo": "*",
     "symfony/console": "@stable",
     "psr/container": "@stable",
-    "cekta/framework-contract": "dev-master"
+    "cekta/module": "dev-master"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "@stable",

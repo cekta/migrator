@@ -6,7 +6,7 @@ namespace Cekta\Migrator;
 
 use ReflectionClass;
 
-class Module implements \Cekta\Framework\Contract\Module
+class Module implements \Cekta\Module\Module
 {
     /**
      * @var array<string,array<string>>
@@ -21,25 +21,21 @@ class Module implements \Cekta\Framework\Contract\Module
     /**
      * @inheritDoc
      */
-    public function onCreate(string $encoded_module): array
+    public function onCreateParameters(mixed $cachedData): array
     {
-        /** @var array<string,array<string>> $state */
-        $state = json_decode($encoded_module, true);
         return [
-            '...' . MigrationLocator::class . '$migrations' => $state[Migration::class] ?? [],
+            '...' . MigrationLocator::class . '$migrations' => $cachedData[Migration::class] ?? [],
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function onBuild(string $encoded_module): array
+    public function onBuildDefinitions(mixed $cachedData): array
     {
-        /** @var array<string,array<string>> $state */
-        $state = json_decode($encoded_module, true);
         return [
             'entries' => [
-                ...($state[Migration::class] ?? []),
+                ...($cachedData[Migration::class] ?? []),
             ],
             'alias' => [
                 Storage::class => $this->storage,
@@ -63,12 +59,8 @@ class Module implements \Cekta\Framework\Contract\Module
     /**
      * @inheritDoc
      */
-    public function getEncodedModule(): string
+    public function getCacheableData(): mixed
     {
-        $encoded_module = json_encode($this->state, JSON_PRETTY_PRINT);
-        if ($encoded_module === false) {
-            throw new \RuntimeException('state not encoded');
-        }
-        return $encoded_module;
+        return $this->state;
     }
 }
