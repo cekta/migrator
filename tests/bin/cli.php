@@ -59,12 +59,13 @@ $application->addCommands([
     new Migrate(
         $storage,
         $locator,
-        'migrate',
-        ...[
+        [
             Migration1::class,
             Migration3::class,
             MigrationMagic::class
-        ]
+        ],
+        'migrate',
+        
     ),
     new Rollback($storage, $locator),
     new MakeMigration(),

@@ -23,14 +23,14 @@ class Migrate extends Command
     /**
      * @param Storage $storage
      * @param MigrationLocator $locator
+     * @param array<class-string> ...$migrations
      * @param string $name
-     * @param class-string ...$migrations
      */
     public function __construct(
         Storage $storage,
         MigrationLocator $locator,
+        array $migrations,
         string $name = 'migrate',
-        string ...$migrations,
     ) {
         parent::__construct($name);
         $this->storage = $storage;

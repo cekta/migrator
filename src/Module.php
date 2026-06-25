@@ -29,7 +29,7 @@ class Module implements \Cekta\Module\Module
     {
         /** @var state $cachedData */
         return [
-            '...' . Migrate::class . '$migrations' => $cachedData[Migration::class] ?? [],
+            Migrate::class . '$migrations' => $cachedData[Migration::class] ?? [],
         ];
     }
 
