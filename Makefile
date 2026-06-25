@@ -2,7 +2,8 @@
 
 dev:
 	docker compose up -d --remove-orphans
-shell: dev
+shell:
+	docker compose up -d --wait app
 	docker compose exec -it app bash
 refresh:
 	docker compose down

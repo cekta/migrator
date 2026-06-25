@@ -31,7 +31,7 @@ class <?= $class ?> implements Migration
         // TODO: Implement down() method.
     }
 
-    public static function id(): int
+    public function priority(): int
     {
         return <?= $id ?>;
     }

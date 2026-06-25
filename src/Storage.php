@@ -9,19 +9,19 @@ interface Storage
     public function execute(Migration $migration): void;
 
     /**
-     * @param array<int> $ids
-     * @return array<int>
+     * @param array<class-string> $migrations
+     * @return array<class-string>
      */
-    public function generateToExecuteIds(array $ids): array;
+    public function generateToExecute(array $migrations): array;
 
     public function isInstalled(): bool;
 
     public function install(): void;
 
     /**
-     * @return array<int>
+     * @return array<int, class-string>
      */
-    public function getRollbackIds(int $step = 1): array;
+    public function getRollbackNames(int $step = 1): array;
 
-    public function rollback(Migration $migration): void;
+    public function rollback(int $id, Migration $migration): void;
 }

@@ -31,20 +31,21 @@ class Rollback extends Command
             $output->writeln('migrator not installed');
             return Command::FAILURE;
         }
-        $ids = $this->storage->getRollbackIds();
+        $names = $this->storage->getRollbackNames();
 
-        if (empty($ids)) {
+        if (empty($names)) {
             $output->writeln('nothing to rollback');
             return Command::SUCCESS;
         }
 
-        $output->writeln('start');
-        foreach ($ids as $id) {
-            $migration = $this->locator->get($id);
+        $output->writeln('start rollback');
+        foreach ($names as $id => $fqcn) {
+            $output->writeln("id is $id");
+            $migration = $this->locator->get($fqcn);
             $class = get_class($migration);
-            $output->writeln("{$class} started");
-            $this->storage->rollback($migration);
-            $output->writeln("{$class} rollbacked");
+            $output->writeln("{{$class} started");
+            $this->storage->rollback($id, $migration);
+            $output->writeln("{$class} finished");
         }
         $output->writeln('done');
         return Command::SUCCESS;

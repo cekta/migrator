@@ -6,10 +6,13 @@ namespace Cekta\Migrator;
 
 use ReflectionClass;
 
+/**
+ * @phpstan-type state array<string,array<string>>
+ */
 class Module implements \Cekta\Module\Module
 {
     /**
-     * @var array<string,array<string>>
+     * @var state
      */
     private array $state = [];
 
@@ -23,6 +26,7 @@ class Module implements \Cekta\Module\Module
      */
     public function onCreateParameters(mixed $cachedData): array
     {
+        /** @var state $cachedData */
         return [
             '...' . MigrationLocator::class . '$migrations' => $cachedData[Migration::class] ?? [],
         ];
@@ -33,6 +37,7 @@ class Module implements \Cekta\Module\Module
      */
     public function onBuildDefinitions(mixed $cachedData): array
     {
+        /** @var state $cachedData */
         return [
             'entries' => [
                 ...($cachedData[Migration::class] ?? []),

@@ -13,5 +13,5 @@ interface Migration
     /**
      * @return int unique ascending identifier, unix timestamp normal choice, date +%s
      */
-    public static function id(): int;
+    public function priority(): int;
 }

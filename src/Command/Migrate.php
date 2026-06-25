@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cekta\Migrator\Command;
 
+use Cekta\Migrator\Migration;
 use Cekta\Migrator\MigrationLocator;
 use Cekta\Migrator\Storage;
 use Symfony\Component\Console\Command\Command;
@@ -12,17 +13,29 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Migrate extends Command
 {
+    /**
+     * @var array<class-string>
+     */
+    private array $migrations;
     private Storage $storage;
     private MigrationLocator $locator;
 
+    /**
+     * @param Storage $storage
+     * @param MigrationLocator $locator
+     * @param string $name
+     * @param class-string ...$migrations
+     */
     public function __construct(
         Storage $storage,
         MigrationLocator $locator,
-        string $name = 'migrate'
+        string $name = 'migrate',
+        string ...$migrations,
     ) {
         parent::__construct($name);
         $this->storage = $storage;
         $this->locator = $locator;
+        $this->migrations = $migrations;
     }
 
     protected function configure(): void
@@ -34,21 +47,32 @@ class Migrate extends Command
     {
         if ($input->getOption('install') && !$this->storage->isInstalled()) {
             $this->storage->install();
+            $output->writeln('migration installed');
         }
         if (!$input->getOption('install') && !$this->storage->isInstalled()) {
             $output->writeln('migrator not installed');
             $output->writeln('use -i or --install to install');
             return Command::FAILURE;
         }
-        $ids = $this->storage->generateToExecuteIds($this->locator->ids());
-        if (empty($ids)) {
+        $migrationNames = $this->storage->generateToExecute($this->migrations);
+
+        if (empty($migrationNames)) {
             $output->writeln('nothing to migrate');
             return Command::SUCCESS;
         }
 
         $output->writeln('start');
-        foreach ($ids as $id) {
-            $migration = $this->locator->get($id);
+
+        $migrations = [];
+        foreach ($migrationNames as $fqcn) {
+            $migrations[] = $this->locator->get($fqcn);
+        }
+
+        usort($migrations, function (Migration $a, Migration $b) {
+            return $a->priority() <=> $b->priority();
+        });
+
+        foreach ($migrations as $migration) {
             $class = get_class($migration);
             $output->writeln("{$class} started");
             $this->storage->execute($migration);

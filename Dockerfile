@@ -1,4 +1,5 @@
-FROM php:cli-alpine as app
+ARG PHP_VERSION
+FROM php:${PHP_VERSION}-cli-alpine as app
 
 COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN \

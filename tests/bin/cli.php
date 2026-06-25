@@ -36,7 +36,7 @@ $container = new class ($pdo) implements ContainerInterface {
         $this->pdo = $pdo;
     }
 
-    public function get(string $id): Migration
+    public function get(string $id): mixed
     {
         $result = match ($id) {
             Migration1::class => new Migration1($this->pdo),
@@ -52,11 +52,20 @@ $container = new class ($pdo) implements ContainerInterface {
         return true;
     }
 };
-$locator = new MigrationLocator($container, ...[Migration1::class, Migration3::class, MigrationMagic::class]);
+$locator = new MigrationLocator($container);
 $storage = new DB($pdo);
 $application = new Application();
 $application->addCommands([
-    new Migrate($storage, $locator),
+    new Migrate(
+        $storage,
+        $locator,
+        'migrate',
+        ...[
+            Migration1::class,
+            Migration3::class,
+            MigrationMagic::class
+        ]
+    ),
     new Rollback($storage, $locator),
     new MakeMigration(),
 ]);

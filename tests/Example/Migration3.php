@@ -37,7 +37,7 @@ EOF
         );
     }
 
-    public static function id(): int
+    public function priority(): int
     {
         return 3;
     }
