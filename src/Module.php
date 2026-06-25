@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cekta\Migrator;
 
+use Cekta\Migrator\Command\Migrate;
 use ReflectionClass;
 
 /**
@@ -28,7 +29,7 @@ class Module implements \Cekta\Module\Module
     {
         /** @var state $cachedData */
         return [
-            '...' . MigrationLocator::class . '$migrations' => $cachedData[Migration::class] ?? [],
+            '...' . Migrate::class . '$migrations' => $cachedData[Migration::class] ?? [],
         ];
     }
 
